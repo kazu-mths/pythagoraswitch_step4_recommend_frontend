@@ -11,6 +11,11 @@ interface Product {
     quantity: number;
     tax: number;
     favorite: boolean;
+}
+
+interface Purchase {
+    product_name: string;
+    quantity: number;
     registration_date: Date;
 }
 
@@ -18,6 +23,8 @@ interface User {
     user_id: number;
     user_name: string;
 }
+
+const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
 
 export default function QrcodeReaderComponent() {
     const [scannedTime, setScannedTime] = useState(new Date());
