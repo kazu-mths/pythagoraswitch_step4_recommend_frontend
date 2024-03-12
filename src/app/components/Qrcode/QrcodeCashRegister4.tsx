@@ -18,11 +18,9 @@ interface FavoriteProduct {
 
 interface Product {
     product_id: number;
-    product_qrcode: number;
     product_name: string;
     including_tax_price: number;
     quantity: number;
-    tax: number;
     favorite: boolean;
 }
 
