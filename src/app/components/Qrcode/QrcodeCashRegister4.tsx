@@ -142,7 +142,7 @@ export default function QrcodeReaderComponent() {
             }
         };
         fetchAndSetProduct();
-    }, [scannedTime, scannedResult]);
+    }, [scannedResult]);
 
     const registerProducts = async () => {
         if (!userId || !token) {
