@@ -209,7 +209,7 @@ export default function QrcodeReaderComponent() {
             <div className="p-4">
                 <h2 className="text-2xl font-bold mb-4">QRコードスキャン結果</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {products.map((product, index: number) => (
+                    {products.map((product: Product, index: number) => (
                         <div key={index} className="card bg-base-100 shadow-xl">
                             <div className="card-body">
                                 <h3 className="card-title">{product.product_name}</h3>
