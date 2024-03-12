@@ -1,0 +1,254 @@
+'use client';
+import { useEffect, useState } from 'react';
+import QrcodeReader from './QrcodeReader';
+import { useSearchParams } from 'next/navigation';
+
+interface Product {
+    product_id: number;
+    product_qrcode: number;
+    product_name: string;
+    including_tax_price: number;
+    quantity: number;
+    tax: number;
+    favorite: boolean; // お気に入りかどうかを示すプロパティ
+}
+
+interface User {
+    user_id: number;
+    user_name: string;
+}
+
+export default function QrcodeReaderComponent() {
+    const [scannedTime, setScannedTime] = useState(new Date());
+    const [scannedResult, setScannedResult] = useState('');
+    const [products, setProducts] = useState<Product[]>([]);
+    const [userName, setUserName] = useState('');
+    const [userId, setUserId] = useState<number | null>(null);
+    const [token, setToken] = useState('');
+    const [searchParams] = useSearchParams();
+    const user_token: string | null = useSearchParams().get("token");
+
+    const [recentPurchases, setRecentPurchases] = useState([]);
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
+
+    const handleFavoriteChange = (productId, isChecked) => {
+        setProducts(prevProducts => {
+            return prevProducts.map(product => {
+                if (product.product_id === productId) {
+                    return { ...product, favorite: isChecked };
+                }
+                return product;
+            });
+        });
+    };
+
+    // useEffect(() => {
+    //     const fetchAndSetUser = async () => {
+    //     const userData = await fetchUser(token);
+    //     setUserName(userData.user_name);
+    //     // user_tokenがnullでないことを確認し、nullであれば空文字列""を使用
+    //     setToken(user_token !== null ? user_token : "");
+    //     console.log(userData);
+    //     };
+    //     fetchAndSetUser();
+    // }, []);
+
+    useEffect(() => {
+        const fetchMyPageData = async () => {
+            if (token) {
+                try {
+                    const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/mypage?token=${token}`, { cache: "no-cache" });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch my page data');
+                    }
+                    const data = await response.json();
+                    setRecentPurchases(data.recent_purchases);
+                    setFavoriteProducts(data.favorite_products);
+                } catch (error) {
+                    console.error("Failed to fetch my page data:", error);
+                }
+            }
+        };
+        fetchMyPageData();
+    }, [token]);
+
+    useEffect(() => {
+        // user_tokenが存在する場合にのみtoken状態を更新
+        if (user_token) {
+            setToken(user_token);
+        }
+    }, [user_token]);
+
+    async function fetchUser(token: string): Promise<User> {
+        const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${token}`, { cache: "no-cache" });
+        if (!response.ok) {
+            throw new Error('Failed to fetch user');
+        }
+        return response.json();
+    }
+
+    useEffect(() => {
+        const fetchAndSetUser = async () => {
+            if (token) {
+                try {
+                    const userData = await fetchUser(token);
+                    console.log("APIからの応答:", userData); // API応答をログに記録
+    
+                    if (userData.user_id !== undefined) {
+                        setUserName(userData.user_name);
+                        setUserId(userData.user_id); // user_idを数値としてセット
+                    } else {
+                        console.log("応答にuser_idが含まれていません。");
+                    }
+                } catch (error) {
+                    console.error("ユーザー情報の取得中にエラーが発生しました:", error);
+                }
+            }
+        };
+        fetchAndSetUser();
+    }, [token]);
+
+    useEffect(() => {
+        if (userId !== null) {
+            console.log(`userIdが更新されました: ${userId}`);
+        }
+    }, [userId]);
+
+    const onNewScanResult = (result: any) => {
+        console.log('QRコードスキャン結果', result);
+        setScannedTime(new Date());
+        setScannedResult(result);
+    };
+
+    async function fetchProduct(scannedResult: any) {
+        const encodedQrcode = encodeURIComponent(scannedResult);
+        const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
+        if (!res.ok) {
+            throw new Error('Failed to fetch product');
+        }
+        return res.json();
+    }
+
+    useEffect(() => {
+        const fetchAndSetProduct = async () => {
+            if (scannedResult) {
+                try {
+                    const newProductData = await fetchProduct(scannedResult);
+                    const productToAdd = { ...newProductData, favorite: false, quantity: 1 };
+                    setProducts(prevProducts => {
+                        const existingProductIndex = prevProducts.findIndex(p => p.product_id === productToAdd.product_id);
+                        if (existingProductIndex !== -1) {
+                            const updatedProducts = [...prevProducts];
+                            updatedProducts[existingProductIndex] = {
+                                ...updatedProducts[existingProductIndex],
+                                quantity: updatedProducts[existingProductIndex].quantity + 1,
+                            };
+                            return updatedProducts;
+                        }
+                        return [...prevProducts, productToAdd];
+                    });
+                    setScannedResult('');
+                } catch (error) {
+                    console.error("Failed to fetch and set product:", error);
+                }
+            }
+        };
+        fetchAndSetProduct();
+    }, [scannedTime, scannedResult]);
+
+    const registerProducts = async () => {
+        if (!userId || !token) {
+            alert('ユーザー情報または認証トークンを取得できませんでした。');
+            return;
+        }
+    
+        try {
+            const registerPromises = products.map(product => {
+                const productData = {
+                    user_id: userId, // userIdを直接使用
+                    product_id: product.product_id,
+                    quantity: product.quantity,
+                    favorite: product.favorite,
+                    registration_date: new Date()
+                };
+    
+                return fetch('https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/purchase', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(productData),
+                });
+            });
+    
+            await Promise.all(registerPromises);
+            alert('商品情報を登録しました。');
+            setProducts([]); // 登録後は商品リストをクリア
+        } catch (error) {
+            console.error("Failed to register products:", error);
+            alert('商品情報の登録に失敗しました。');
+        }
+    };
+
+    return (
+        <>
+        <div>ようこそ {userName}さん！</div>
+            <div className="p-4">
+                <h2 className="text-2xl font-bold mb-4">QRコードスキャン結果</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {products.map((product, index) => (
+                        <div key={index} className="card bg-base-100 shadow-xl">
+                            <div className="card-body">
+                                <h3 className="card-title">{product.product_name}</h3>
+                                <p>価格: ¥{product.including_tax_price}</p>
+                                <p>数量: {product.quantity}</p>
+                                <div className="card-actions justify-end">
+                                    <label className="label cursor-pointer">
+                                        <span className="label-text">お気に入り</span>
+                                        <input type="checkbox" className="toggle toggle-accent" checked={product.favorite} onChange={e => handleFavoriteChange(product.product_id, e.target.checked)} />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="py-4">
+                    <button className="btn btn-primary" onClick={registerProducts}>登録</button>
+                </div>
+            </div>
+            <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
+
+            // 直近の購入履歴の表示
+            <div className="p-4">
+                <h2 className="text-2xl font-bold mb-4">直近の購入履歴</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {recentPurchases.map((purchase, index) => (
+                        <div key={index} className="card bg-base-100 shadow-xl">
+                            <div className="card-body">
+                                <h3 className="card-title">{purchase.product_name}</h3>
+                                <p>数量: {purchase.quantity}</p>
+                                <p>購入日: {new Date(purchase.registration_date).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            // お気に入り商品の表示
+            <div className="p-4">
+                <h2 className="text-2xl font-bold mb-4">お気に入り商品</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {favoriteProducts.map((product, index) => (
+                        <div key={index} className="card bg-base-100 shadow-xl">
+                            <div className="card-body">
+                                <h3 className="card-title">{product.product_name}</h3>
+                                <p>価格: ¥{product.including_tax_price}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    );
+}
