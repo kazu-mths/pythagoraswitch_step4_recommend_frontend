@@ -5,14 +5,14 @@ import { useRouter } from 'next/navigation';
 
 export default function Login() {
     const formRef = useRef<HTMLFormElement>(null);
-    const [userName, setUserName] = useState(''); // ユーザー名の状態を管理
-    const [token, setToken] = useState(''); // ユーザー名の状態を管理
+    const [userName, setUserName] = useState('');
+    const [token, setToken] = useState('');
     const router = useRouter();
 
     const handleSend = async (event: any) => {
         event.preventDefault();
 
-        // formRef.currentがnullでないことを確認
+        
         if (formRef.current) {
             const formData = new FormData(formRef.current);
             const body_msg = JSON.stringify({
@@ -51,12 +51,12 @@ export default function Login() {
     useEffect(() => {
         console.log(userName);
 
-        // userNameが空でない場合のみ実行
+        
         if (userName) {
             window.alert(`ようこそ ${userName}さま！`);
             router.push(`/shopping?token=${token}`);
         }
-    }, [userName, token]); // userNameとtokenが変更されたときにのみ実行
+    },[userName, token, router]);
 
     return (
         <>
