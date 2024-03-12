@@ -138,7 +138,7 @@ export default function QrcodeReaderComponent() {
         setScannedResult(result);
     };
 
-    aasync function fetchProduct(scannedResult: string): Promise<ProductResponse> {
+    async function fetchProduct(scannedResult: string): Promise<ProductResponse> {
     const encodedQrcode = encodeURIComponent(scannedResult);
     const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
     if (!res.ok) {
