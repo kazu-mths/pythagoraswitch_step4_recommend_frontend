@@ -11,6 +11,7 @@ interface Product {
     quantity: number;
     tax: number;
     favorite: boolean;
+    registration_date: Date;
 }
 
 interface User {
