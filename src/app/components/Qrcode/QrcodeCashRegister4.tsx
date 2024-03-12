@@ -54,7 +54,6 @@ export default function QrcodeReaderComponent() {
     const [userId, setUserId] = useState<number | null>(null);
     const [token, setToken] = useState('');
     const router = useRouter();
-    const user_token: string | null = useSearchParams().get("token");
 
     const [recentPurchases, setRecentPurchases] = useState<RecentPurchase[]>([]);
     const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
@@ -76,7 +75,7 @@ export default function QrcodeReaderComponent() {
         if (user_token && typeof user_token === 'string') {
             setToken(user_token);
         }
-    }, [router.query]); 
+    }, [router.query]);
     
     useEffect(() => {
         const fetchMyPageData = async () => {
