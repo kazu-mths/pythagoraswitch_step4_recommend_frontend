@@ -82,7 +82,7 @@ useEffect(() => {
     return () => {
     scanner.clear();
     };
-}, [onScanSuccess, onScanFailure, qrcodeRegionId]);
+}, []);
 
 return (
     <div className='container mx-auto'>
