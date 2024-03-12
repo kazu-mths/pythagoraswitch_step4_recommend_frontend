@@ -82,7 +82,7 @@ useEffect(() => {
     return () => {
     scanner.clear();
     };
-}, []);
+}, [onScanFailure, onScanSuccess]);
 
 return (
     <div className='container mx-auto'>
