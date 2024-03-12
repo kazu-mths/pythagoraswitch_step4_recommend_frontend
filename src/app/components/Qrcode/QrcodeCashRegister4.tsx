@@ -24,8 +24,6 @@ interface User {
     user_name: string;
 }
 
-const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
-
 export default function QrcodeReaderComponent() {
     const [scannedTime, setScannedTime] = useState(new Date());
     const [scannedResult, setScannedResult] = useState('');
@@ -36,7 +34,7 @@ export default function QrcodeReaderComponent() {
     const [searchParams] = useSearchParams();
     const user_token: string | null = useSearchParams().get("token");
 
-    const [recentPurchases, setRecentPurchases] = useState([]);
+    const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
 
     const handleFavoriteChange = (productId: number, isChecked: boolean) => {
