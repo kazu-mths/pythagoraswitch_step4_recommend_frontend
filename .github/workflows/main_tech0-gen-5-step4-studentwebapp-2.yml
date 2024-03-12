@@ -64,6 +64,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'tech0-gen-5-step4-studentwebapp-2'
-          slot-name: 'production'
+          slot-name: 'Production'
           package: ./deploy
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0CB198067FDE4C12BAA926A023D20192 }}
