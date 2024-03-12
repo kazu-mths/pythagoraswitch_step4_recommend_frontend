@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import QrcodeReader from './QrcodeReader';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 interface RecentPurchase {
     purchase_id: number;
@@ -53,7 +53,7 @@ export default function QrcodeReaderComponent() {
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState<number | null>(null);
     const [token, setToken] = useState('');
-    const [searchParams] = useSearchParams();
+    const router = useRouter();
     const user_token: string | null = useSearchParams().get("token");
 
     const [recentPurchases, setRecentPurchases] = useState<RecentPurchase[]>([]);
@@ -70,6 +70,14 @@ export default function QrcodeReaderComponent() {
         });
     };
 
+    useEffect(() => {
+        const user_token = router.query.token;
+
+        if (user_token && typeof user_token === 'string') {
+            setToken(user_token);
+        }
+    }, [router.query]); 
+    
     useEffect(() => {
         const fetchMyPageData = async () => {
             if (token) {
