@@ -71,7 +71,7 @@ export default function QrcodeReaderComponent() {
 
 useEffect(() => {
     const tokenFromQuery: string | string[] | undefined = router.query.token;
-    if (tokenFromQuery) {
+    if (tokenFromQuery && typeof tokenFromQuery === 'string') {
         setToken(tokenFromQuery);
     }
 }, [router.query.token]);
