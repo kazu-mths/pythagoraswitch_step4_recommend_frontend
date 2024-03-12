@@ -33,7 +33,6 @@ export default function QrcodeReaderComponent() {
     const [token, setToken] = useState('');
     const [searchParams] = useSearchParams();
     const user_token: string | null = useSearchParams().get("token");
-    const products: Product[] = [...];
 
     const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
