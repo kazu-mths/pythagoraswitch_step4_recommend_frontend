@@ -7,7 +7,7 @@ interface RecentPurchase {
     purchase_id: number;
     product_name: string;
     quantity: number;
-    registration_date: string;
+    registration_date: date;
 }
 
 interface FavoriteProduct {
@@ -26,7 +26,7 @@ interface Product {
     favorite: boolean;
 }
 
-interface MyPageResponse {
+interface MyPageData {
     recent_purchases: RecentPurchase[];
     favorite_products: FavoriteProduct[];
 }
@@ -42,6 +42,12 @@ interface User {
     user_name: string;
 }
 
+interface ProductResponse {
+    product_id: number;
+    product_name: string;
+    including_tax_price: number;
+}
+
 export default function QrcodeReaderComponent() {
     const [scannedTime, setScannedTime] = useState(new Date());
     const [scannedResult, setScannedResult] = useState('');
@@ -52,8 +58,8 @@ export default function QrcodeReaderComponent() {
     const [searchParams] = useSearchParams();
     const user_token: string | null = useSearchParams().get("token");
 
-    const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
-    const [favoriteProducts, setFavoriteProducts] = useState([]);
+    const [recentPurchases, setRecentPurchases] = useState<RecentPurchase[]>([]);
+    const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
 
     const handleFavoriteChange = (productId: number, isChecked: boolean) => {
         setProducts(prevProducts => {
@@ -74,7 +80,7 @@ export default function QrcodeReaderComponent() {
                     if (!response.ok) {
                         throw new Error('Failed to fetch my page data');
                     }
-                    const data = await response.json();
+                    const data: MyPageData = await response.json();
                     setRecentPurchases(data.recent_purchases);
                     setFavoriteProducts(data.favorite_products);
                 } catch (error) {
@@ -132,14 +138,14 @@ export default function QrcodeReaderComponent() {
         setScannedResult(result);
     };
 
-    async function fetchProduct(scannedResult: any) {
-        const encodedQrcode = encodeURIComponent(scannedResult);
-        const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
-        if (!res.ok) {
-            throw new Error('Failed to fetch product');
-        }
-        return res.json();
+    aasync function fetchProduct(scannedResult: string): Promise<ProductResponse> {
+    const encodedQrcode = encodeURIComponent(scannedResult);
+    const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
+    if (!res.ok) {
+        throw new Error('Failed to fetch product');
     }
+    return res.json() as Promise<ProductResponse>;
+}
 
     useEffect(() => {
         const fetchAndSetProduct = async () => {
