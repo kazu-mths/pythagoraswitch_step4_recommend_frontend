@@ -3,6 +3,19 @@ import { useEffect, useState } from 'react';
 import QrcodeReader from './QrcodeReader';
 import { useSearchParams } from 'next/navigation';
 
+interface RecentPurchase {
+    purchase_id: number;
+    product_name: string;
+    quantity: number;
+    registration_date: string;
+}
+
+interface FavoriteProduct {
+    product_id: number;
+    product_name: string;
+    including_tax_price: number;
+}
+
 interface Product {
     product_id: number;
     product_qrcode: number;
@@ -11,6 +24,11 @@ interface Product {
     quantity: number;
     tax: number;
     favorite: boolean;
+}
+
+interface MyPageResponse {
+    recent_purchases: RecentPurchase[];
+    favorite_products: FavoriteProduct[];
 }
 
 interface Purchase {
