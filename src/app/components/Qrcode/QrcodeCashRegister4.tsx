@@ -70,12 +70,11 @@ export default function QrcodeReaderComponent() {
     };
 
     useEffect(() => {
-        const user_token = router.query.token;
-
-        if (user_token && typeof user_token === 'string') {
-            setToken(user_token);
-        }
-    }, [router.query]);
+    const user_token: string | null = router.query.token as string;
+    if (user_token) {
+      setToken(user_token);
+    }
+  }, [router.query.token]);
     
     useEffect(() => {
         const fetchMyPageData = async () => {
