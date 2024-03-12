@@ -7,7 +7,7 @@ interface RecentPurchase {
     purchase_id: number;
     product_name: string;
     quantity: number;
-    registration_date: date;
+    registration_date: Date;
 }
 
 interface FavoriteProduct {
