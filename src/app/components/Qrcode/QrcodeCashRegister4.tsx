@@ -10,7 +10,7 @@ interface Product {
     including_tax_price: number;
     quantity: number;
     tax: number;
-    favorite: boolean; // お気に入りかどうかを示すプロパティ
+    favorite: boolean;
 }
 
 interface User {
@@ -42,17 +42,6 @@ export default function QrcodeReaderComponent() {
         });
     };
 
-    // useEffect(() => {
-    //     const fetchAndSetUser = async () => {
-    //     const userData = await fetchUser(token);
-    //     setUserName(userData.user_name);
-    //     // user_tokenがnullでないことを確認し、nullであれば空文字列""を使用
-    //     setToken(user_token !== null ? user_token : "");
-    //     console.log(userData);
-    //     };
-    //     fetchAndSetUser();
-    // }, []);
-
     useEffect(() => {
         const fetchMyPageData = async () => {
             if (token) {
@@ -73,7 +62,6 @@ export default function QrcodeReaderComponent() {
     }, [token]);
 
     useEffect(() => {
-        // user_tokenが存在する場合にのみtoken状態を更新
         if (user_token) {
             setToken(user_token);
         }
@@ -92,11 +80,11 @@ export default function QrcodeReaderComponent() {
             if (token) {
                 try {
                     const userData = await fetchUser(token);
-                    console.log("APIからの応答:", userData); // API応答をログに記録
+                    console.log("APIからの応答:", userData);
     
                     if (userData.user_id !== undefined) {
                         setUserName(userData.user_name);
-                        setUserId(userData.user_id); // user_idを数値としてセット
+                        setUserId(userData.user_id);
                     } else {
                         console.log("応答にuser_idが含まれていません。");
                     }
@@ -165,7 +153,7 @@ export default function QrcodeReaderComponent() {
         try {
             const registerPromises = products.map(product => {
                 const productData = {
-                    user_id: userId, // userIdを直接使用
+                    user_id: userId,
                     product_id: product.product_id,
                     quantity: product.quantity,
                     favorite: product.favorite,
@@ -184,7 +172,7 @@ export default function QrcodeReaderComponent() {
     
             await Promise.all(registerPromises);
             alert('商品情報を登録しました。');
-            setProducts([]); // 登録後は商品リストをクリア
+            setProducts([]);
         } catch (error) {
             console.error("Failed to register products:", error);
             alert('商品情報の登録に失敗しました。');
@@ -219,7 +207,7 @@ export default function QrcodeReaderComponent() {
             </div>
             <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
 
-            // 直近の購入履歴の表示
+            
             <div className="p-4">
                 <h2 className="text-2xl font-bold mb-4">直近の購入履歴</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -235,7 +223,7 @@ export default function QrcodeReaderComponent() {
                 </div>
             </div>
 
-            // お気に入り商品の表示
+            
             <div className="p-4">
                 <h2 className="text-2xl font-bold mb-4">お気に入り商品</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
