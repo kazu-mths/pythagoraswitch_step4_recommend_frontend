@@ -20,14 +20,6 @@ export default function Login() {
                 password: formData.get('password'),
             });
 
-            // const response = await fetch('https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/login', {
-            //     method: 'POST',
-            //     body: body_msg,
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            // });
-
             const response = await fetch('https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/login', {
                 method: 'POST',
                 body: body_msg,
