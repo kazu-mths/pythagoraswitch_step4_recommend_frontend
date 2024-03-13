@@ -31,7 +31,7 @@ export default function QrcodeReaderComponent() {
     const [recentPurchases, setRecentPurchases] = useState([]);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
 
-    const handleFavoriteChange = (productId, isChecked) => {
+    const handleFavoriteChange = (productId: number, isChecked: boolean) => {
         setProducts(prevProducts => {
             return prevProducts.map(product => {
                 if (product.product_id === productId) {
