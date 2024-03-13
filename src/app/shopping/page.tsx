@@ -1,4 +1,4 @@
-"use client";// import先は適宜置き換えてください。
+"use client";
 import React from 'react';
 import QrcodeCashRegister4 from './../components/Qrcode/QrcodeCashRegister4';
 
