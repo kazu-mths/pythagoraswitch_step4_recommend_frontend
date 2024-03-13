@@ -40,7 +40,6 @@ export default function QrcodeReaderComponent() {
     const user_token: string | null = useSearchParams().get("token");
     const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
     const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
-    const [favoriteProducts, setFavoriteProducts] = useState([]);
 
     const handleFavoriteChange = (productId: number, isChecked: boolean) => {
         setProducts(prevProducts => {
