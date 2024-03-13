@@ -1,49 +1,21 @@
 'use client';
 import { useEffect, useState } from 'react';
 import QrcodeReader from './QrcodeReader';
-import { useRouter } from 'next/router';
-
-interface RecentPurchase {
-    purchase_id: number;
-    product_name: string;
-    quantity: number;
-    registration_date: Date;
-}
-
-interface FavoriteProduct {
-    product_id: number;
-    product_name: string;
-    including_tax_price: number;
-}
+import { useSearchParams } from 'next/navigation';
 
 interface Product {
     product_id: number;
+    product_qrcode: number;
     product_name: string;
     including_tax_price: number;
     quantity: number;
+    tax: number;
     favorite: boolean;
-}
-
-interface MyPageData {
-    recent_purchases: RecentPurchase[];
-    favorite_products: FavoriteProduct[];
-}
-
-interface Purchase {
-    product_name: string;
-    quantity: number;
-    registration_date: Date;
 }
 
 interface User {
     user_id: number;
     user_name: string;
-}
-
-interface ProductResponse {
-    product_id: number;
-    product_name: string;
-    including_tax_price: number;
 }
 
 export default function QrcodeReaderComponent() {
@@ -53,12 +25,13 @@ export default function QrcodeReaderComponent() {
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState<number | null>(null);
     const [token, setToken] = useState('');
-    const router = useRouter();
+    const [searchParams] = useSearchParams();
+    const user_token: string | null = useSearchParams().get("token");
 
-    const [recentPurchases, setRecentPurchases] = useState<RecentPurchase[]>([]);
-    const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
+    const [recentPurchases, setRecentPurchases] = useState([]);
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
 
-    const handleFavoriteChange = (productId: number, isChecked: boolean) => {
+    const handleFavoriteChange = (productId, isChecked) => {
         setProducts(prevProducts => {
             return prevProducts.map(product => {
                 if (product.product_id === productId) {
@@ -69,13 +42,6 @@ export default function QrcodeReaderComponent() {
         });
     };
 
-useEffect(() => {
-    const tokenFromQuery: string | string[] | undefined = router.query.token;
-    if (tokenFromQuery && typeof tokenFromQuery === 'string') {
-        setToken(tokenFromQuery);
-    }
-}, [router.query.token]);
-    
     useEffect(() => {
         const fetchMyPageData = async () => {
             if (token) {
@@ -84,7 +50,7 @@ useEffect(() => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch my page data');
                     }
-                    const data: MyPageData = await response.json();
+                    const data = await response.json();
                     setRecentPurchases(data.recent_purchases);
                     setFavoriteProducts(data.favorite_products);
                 } catch (error) {
@@ -142,14 +108,14 @@ useEffect(() => {
         setScannedResult(result);
     };
 
-    async function fetchProduct(scannedResult: string): Promise<ProductResponse> {
-    const encodedQrcode = encodeURIComponent(scannedResult);
-    const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
-    if (!res.ok) {
-        throw new Error('Failed to fetch product');
+    async function fetchProduct(scannedResult: any) {
+        const encodedQrcode = encodeURIComponent(scannedResult);
+        const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
+        if (!res.ok) {
+            throw new Error('Failed to fetch product');
+        }
+        return res.json();
     }
-    return res.json() as Promise<ProductResponse>;
-}
 
     useEffect(() => {
         const fetchAndSetProduct = async () => {
@@ -219,7 +185,7 @@ useEffect(() => {
             <div className="p-4">
                 <h2 className="text-2xl font-bold mb-4">QRコードスキャン結果</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {products.map((product: Product, index: number) => (
+                    {products.map((product, index) => (
                         <div key={index} className="card bg-base-100 shadow-xl">
                             <div className="card-body">
                                 <h3 className="card-title">{product.product_name}</h3>
