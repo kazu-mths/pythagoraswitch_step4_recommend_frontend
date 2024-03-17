@@ -18,17 +18,6 @@ interface User {
     user_name: string;
 }
 
-interface Purchase {
-    product_name: string;
-    quantity: number;
-    registration_date: string;
-}
-
-interface FavoriteProduct {
-    product_name: string;
-    including_tax_price: number;
-}
-
 export default function QrcodeReaderComponent() {
     const [scannedTime, setScannedTime] = useState(new Date());
     const [scannedResult, setScannedResult] = useState('');
@@ -36,11 +25,13 @@ export default function QrcodeReaderComponent() {
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState<number | null>(null);
     const [token, setToken] = useState('');
-    const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
-    const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
+    // const [searchParams] = useSearchParams();
     const user_token: string | null = useSearchParams().get("token");
 
-    const handleFavoriteChange = (productId: number, isChecked: boolean) => {
+    // const [recentPurchases, setRecentPurchases] = useState([]);
+    // const [favoriteProducts, setFavoriteProducts] = useState([]);
+
+    const handleFavoriteChange = (productId :number, isChecked :boolean) => {
         setProducts(prevProducts => {
             return prevProducts.map(product => {
                 if (product.product_id === productId) {
@@ -187,6 +178,22 @@ export default function QrcodeReaderComponent() {
             alert('商品情報の登録に失敗しました。');
         }
     };
+
+    interface Purchase {
+        product_name: string;
+        quantity: number;
+        registration_date: string;
+    }
+    
+    const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
+
+    interface FavoriteProduct {
+        product_name: string;
+        including_tax_price: number;
+    }
+
+    const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
+
 
     return (
         <>
