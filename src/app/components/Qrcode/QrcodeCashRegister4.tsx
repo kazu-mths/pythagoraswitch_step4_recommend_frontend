@@ -1,7 +1,8 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import QrcodeReader from './QrcodeReader';
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
+import UserTokenComponent from './UserTokenComponent';
 
 interface Product {
     product_id: number;
@@ -13,23 +14,33 @@ interface Product {
     favorite: boolean;
 }
 
-interface User {
-    user_id: number;
-    user_name: string;
+interface Purchase {
+    product_name: string;
+    quantity: number;
+    registration_date: string;
 }
 
-export default function QrcodeReaderComponent() {
+
+interface FavoriteProduct {
+    product_name: string;
+    including_tax_price: number;
+}
+
+
+// interface User {
+//     user_id: number;
+//     user_name: string;
+// }
+
+export function QrcodeReaderComponent() {
     const [scannedTime, setScannedTime] = useState(new Date());
     const [scannedResult, setScannedResult] = useState('');
     const [products, setProducts] = useState<Product[]>([]);
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState<number | null>(null);
-    const [token, setToken] = useState('');
-    // const [searchParams] = useSearchParams();
-    const user_token: string | null = useSearchParams().get("token");
-
-    // const [recentPurchases, setRecentPurchases] = useState([]);
-    // const [favoriteProducts, setFavoriteProducts] = useState([]);
+    const [token, setToken] = useState<string | null>(null);
+    const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
+    const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
 
     const handleFavoriteChange = (productId :number, isChecked :boolean) => {
         setProducts(prevProducts => {
@@ -61,11 +72,11 @@ export default function QrcodeReaderComponent() {
         fetchMyPageData();
     }, [token]);
 
-    useEffect(() => {
-        if (user_token) {
-            setToken(user_token);
-        }
-    }, [user_token]);
+    // useEffect(() => {
+    //     if (user_token) {
+    //         setToken(user_token);
+    //     }
+    // }, [user_token]);
 
     async function fetchUser(token: string): Promise<User> {
         const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${token}`, { cache: "no-cache" });
@@ -179,26 +190,14 @@ export default function QrcodeReaderComponent() {
         }
     };
 
-    interface Purchase {
-        product_name: string;
-        quantity: number;
-        registration_date: string;
-    }
-    
-    const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
-
-    interface FavoriteProduct {
-        product_name: string;
-        including_tax_price: number;
-    }
-
-    const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
-
 
     return (
         <>
         <div>ようこそ {userName}さん！</div>
             <div className="p-4">
+            <Suspense fallback={<div>Loading token...</div>}>
+                <UserTokenComponent setToken={setToken} />
+            </Suspense>
                 <h2 className="text-2xl font-bold mb-4">QRコードスキャン結果</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {products.map((product, index) => (
@@ -213,6 +212,11 @@ export default function QrcodeReaderComponent() {
                                         <input type="checkbox" className="toggle toggle-accent" checked={product.favorite} onChange={e => handleFavoriteChange(product.product_id, e.target.checked)} />
                                     </label>
                                 </div>
+
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <UserTokenComponent setToken={setToken} />
+                                </Suspense>
+                                <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
                             </div>
                         </div>
                     ))}
@@ -256,3 +260,5 @@ export default function QrcodeReaderComponent() {
         </>
     );
 }
+
+export default QrcodeReaderComponent;
