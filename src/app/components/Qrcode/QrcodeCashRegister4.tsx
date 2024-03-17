@@ -5,20 +5,34 @@ import QrcodeReader from './QrcodeReader';
 export default function QrcodeReaderComponent() {
     const [token, setToken] = useState('');
 
-    useEffect(() => {
-        const fetchToken = async () => {
-            // window が定義されている場合のみ実行
-            if (typeof window !== 'undefined') {
-                const params = new URLSearchParams(window.location.search);
-                const user_token = params.get('token');
-                if (user_token) {
-                    setToken(user_token);
-                }
-            }
-        };
+export default function Shopping({ user }) {
+  return (
+    <main>
+      <div>
+        <QrcodeCashRegister4 user={user} />
+      </div>
+    </main>
+  );
+}
 
-        fetchToken();
-    }, []);
+export async function getServerSideProps(context) {
+  const { query } = context;
+  const { token } = query;
+
+  let user = null;
+  if (token) {
+    try {
+      const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${token}`, { cache: "no-cache" });
+      if (res.ok) {
+        user = await res.json();
+      }
+    } catch (error) {
+      console.error("Failed to fetch user data on server-side:", error);
+    }
+  }
+
+  return { props: { user } };
+}
 
 interface Product {
     product_id: number;
