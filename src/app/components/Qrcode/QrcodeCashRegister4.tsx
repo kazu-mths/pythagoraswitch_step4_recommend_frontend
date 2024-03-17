@@ -5,16 +5,6 @@ import QrcodeReader from './QrcodeReader';
 export default function QrcodeReaderComponent() {
     const [token, setToken] = useState('');
 
-export default function Shopping({ user }) {
-  return (
-    <main>
-      <div>
-        <QrcodeCashRegister4 user={user} />
-      </div>
-    </main>
-  );
-}
-
 export async function getServerSideProps(context) {
   const { query } = context;
   const { token } = query;
