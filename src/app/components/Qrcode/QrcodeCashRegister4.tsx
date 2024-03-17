@@ -1,28 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import QrcodeReader from './QrcodeReader';
-
-export default function QrcodeReaderComponent() {
-    const [token, setToken] = useState('');
-
-export async function getServerSideProps(context) {
-  const { query } = context;
-  const { token } = query;
-
-  let user = null;
-  if (token) {
-    try {
-      const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${token}`, { cache: "no-cache" });
-      if (res.ok) {
-        user = await res.json();
-      }
-    } catch (error) {
-      console.error("Failed to fetch user data on server-side:", error);
-    }
-  }
-
-  return { props: { user } };
-}
+import { useSearchParams } from 'next/navigation';
 
 interface Product {
     product_id: number;
@@ -59,6 +38,7 @@ export default function QrcodeReaderComponent() {
     const [token, setToken] = useState('');
     const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
     const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
+    const user_token: string | null = useSearchParams().get("token");
 
     const handleFavoriteChange = (productId: number, isChecked: boolean) => {
         setProducts(prevProducts => {
