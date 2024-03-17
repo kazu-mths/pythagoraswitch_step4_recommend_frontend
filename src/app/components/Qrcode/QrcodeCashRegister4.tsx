@@ -1,7 +1,24 @@
 'use client';
 import { useEffect, useState } from 'react';
 import QrcodeReader from './QrcodeReader';
-import { useSearchParams } from 'next/navigation';
+
+export default function QrcodeReaderComponent() {
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        const fetchToken = async () => {
+            // window が定義されている場合のみ実行
+            if (typeof window !== 'undefined') {
+                const params = new URLSearchParams(window.location.search);
+                const user_token = params.get('token');
+                if (user_token) {
+                    setToken(user_token);
+                }
+            }
+        };
+
+        fetchToken();
+    }, []);
 
 interface Product {
     product_id: number;
@@ -36,8 +53,6 @@ export default function QrcodeReaderComponent() {
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState<number | null>(null);
     const [token, setToken] = useState('');
-    const [searchParams] = useSearchParams();
-    const user_token: string | null = useSearchParams().get("token");
     const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
     const [recentPurchases, setRecentPurchases] = useState<Purchase[]>([]);
 
