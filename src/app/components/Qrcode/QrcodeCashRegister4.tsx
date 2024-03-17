@@ -27,10 +27,10 @@ interface FavoriteProduct {
 }
 
 
-// interface User {
-//     user_id: number;
-//     user_name: string;
-// }
+interface User {
+    user_id: number;
+    user_name: string;
+}
 
 export function QrcodeReaderComponent() {
     const [scannedTime, setScannedTime] = useState(new Date());
