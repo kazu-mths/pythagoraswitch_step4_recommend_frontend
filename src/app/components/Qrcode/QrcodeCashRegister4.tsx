@@ -61,7 +61,7 @@ export function QrcodeReaderComponent() {
         const fetchMyPageData = async () => {
             if (token) {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/mypage?token=${token}`, { cache: "no-cache" });
+                    const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/mypage?token=${token}`, { cache: "no-cache" });
                     if (!response.ok) {
                         throw new Error('Failed to fetch my page data');
                     }
@@ -83,7 +83,7 @@ export function QrcodeReaderComponent() {
     // }, [user_token]);
 
     async function fetchUser(token: string): Promise<User> {
-        const response = await fetch(`http://127.0.0.1:8000/shopping?token=${token}`, { cache: "no-cache" });
+        const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${token}`, { cache: "no-cache" });
         if (!response.ok) {
             throw new Error('Failed to fetch user');
         }
@@ -125,7 +125,7 @@ export function QrcodeReaderComponent() {
 
     async function fetchProduct(scannedResult: any) {
         const encodedQrcode = encodeURIComponent(scannedResult);
-        const res = await fetch(`http://127.0.0.1:8000/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
+        const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
         if (!res.ok) {
             throw new Error('Failed to fetch product');
         }
