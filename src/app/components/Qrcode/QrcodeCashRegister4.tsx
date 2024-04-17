@@ -175,7 +175,7 @@ export function QrcodeReaderComponent() {
                     registration_date: new Date()
                 };
     
-                return fetch('http://127.0.0.1:8000/purchase', {
+                return fetch('https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/purchase', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
