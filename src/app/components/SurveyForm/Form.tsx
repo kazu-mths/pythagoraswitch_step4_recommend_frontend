@@ -38,7 +38,7 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     ];
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/survey?token=${encodeURIComponent(token)}`, {
+        const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/survey?token=${encodeURIComponent(token)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
