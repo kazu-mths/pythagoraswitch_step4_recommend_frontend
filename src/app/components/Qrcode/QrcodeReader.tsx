@@ -16,7 +16,7 @@ onScanFailure: any;
 // QRコードリーダーの設定
 // fpsは読み取り頻度。デフォルトは　2.１秒間に何回読み取るかの値を設定。１ならば１秒間に１回読み取る。
 // qrboxは読み取り範囲の設定。widthとheightを設定する。
-const [config,setConfig] = useState({ fps: 1, qrbox: { width: 250, height: 250 } });
+const config = { fps: 1, qrbox: { width: 250, height: 250 } };
 
 // カメラの許可
 const [cameraPermission, setCameraPermission] = useState(false);
@@ -29,16 +29,6 @@ const [cameras, setCameras] = useState<any>([]);
 
 // QRコードリーダーインスタンス
 const [html5QrcodeScanner, setHtml5QrcodeScanner] = useState<any>(null);
-
-// スキャナーのセットアップとクリーンアップ
-useEffect(() => {
-    const scanner = new Html5Qrcode(qrcodeRegionId);
-    setHtml5QrcodeScanner(scanner);
-
-    return () => {
-        scanner.stop().catch(console.error);
-    };
-}, [onScanSuccess, onScanFailure]);
 
 // カメラ情報を取得するための関数
 const getCameras = async () => {
@@ -59,20 +49,20 @@ const getCameras = async () => {
     });
 };
 
-
 // スキャン開始
-  const startScan = async () => {
-    if (!html5QrcodeScanner) {
-      console.error('Scanner not initialized');
-      return;
-    }
+const startScan = async () => {
     try {
-      await html5QrcodeScanner.start(selectedCameraId, config, onScanSuccess, onScanFailure);
+    await html5QrcodeScanner.start(
+        selectedCameraId,
+        config,
+        onScanSuccess,
+        onScanFailure,
+    );
+    setHtml5QrcodeScanner(html5QrcodeScanner);
     } catch (error) {
-      console.error('Error starting the scanner:', error);
+    console.error('Error starting the scanner: ', error);
     }
-  };
-
+};
 
 // スキャン停止
 const stopScan = async () => {
@@ -85,43 +75,25 @@ const stopScan = async () => {
     }
 };
 
-  const switchCamera = async (cameraId: string) => {
-    setSelectedCameraId(cameraId);
-    if (html5QrcodeScanner) {
-      try {
-        await html5QrcodeScanner.stop();
-        await html5QrcodeScanner.start(cameraId, config, onScanSuccess, onScanFailure);
-      } catch (error) {
-        console.error('Error switching camera:', error);
-      }
-    }
-  };
+// カメラ切り替え
+const switchCamera = (targetId: string) => {
+    console.log(targetId);
+    setSelectedCameraId(targetId);
+};
 
-// カメラIDが変更されたときのスキャン再開
 useEffect(() => {
-    const startScan = async () => {
-        if (!html5QrcodeScanner) {
-            console.error('Scanner not initialized');
-            return;
-        }
-        try {
-            await html5QrcodeScanner.start(selectedCameraId, config, onScanSuccess, onScanFailure);
-        } catch (error) {
-            console.error('Error starting the scanner: ', error);
-        }
-    };
-
-    if (selectedCameraId) {
-        startScan();
+    if (!onScanSuccess && !onScanFailure) {
+    throw 'required callback.';
     }
 
-        return () => {
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.stop().catch(console.error);
-            }
-        };
-    }, [html5QrcodeScanner, selectedCameraId, onScanSuccess, onScanFailure]);
-    
+    const scanner = new Html5Qrcode(qrcodeRegionId);
+    setHtml5QrcodeScanner(scanner);
+
+    return () => {
+    scanner.clear();
+    };
+}, []);
+
 return (
     <div className='container mx-auto'>
     <div className='max-w-screen-lg' id={qrcodeRegionId} />
