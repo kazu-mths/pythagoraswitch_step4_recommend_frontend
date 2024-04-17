@@ -19,7 +19,7 @@ export default function Login() {
                 password: formData.get('password'),
             });
 
-            const response = await fetch('http://127.0.0.1:8000/login', {
+            const response = await fetch('https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
