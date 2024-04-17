@@ -12,18 +12,21 @@ interface Product {
     quantity: number;
     tax: number;
     favorite: boolean;
+    image_url: string;
 }
 
 interface Purchase {
     product_name: string;
     quantity: number;
     registration_date: string;
+    image_url: string
 }
 
 
 interface FavoriteProduct {
     product_name: string;
     including_tax_price: number;
+    image_url: string;
 }
 
 
@@ -57,7 +60,7 @@ export function QrcodeReaderComponent() {
         const fetchMyPageData = async () => {
             if (token) {
                 try {
-                    const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/mypage?token=${token}`, { cache: "no-cache" });
+                    const response = await fetch(`http://127.0.0.1:8000/mypage?token=${token}`, { cache: "no-cache" });
                     if (!response.ok) {
                         throw new Error('Failed to fetch my page data');
                     }
@@ -79,7 +82,7 @@ export function QrcodeReaderComponent() {
     // }, [user_token]);
 
     async function fetchUser(token: string): Promise<User> {
-        const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${token}`, { cache: "no-cache" });
+        const response = await fetch(`http://127.0.0.1:8000/shopping?token=${token}`, { cache: "no-cache" });
         if (!response.ok) {
             throw new Error('Failed to fetch user');
         }
@@ -121,7 +124,7 @@ export function QrcodeReaderComponent() {
 
     async function fetchProduct(scannedResult: any) {
         const encodedQrcode = encodeURIComponent(scannedResult);
-        const res = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
+        const res = await fetch(`http://127.0.0.1:8000/qrcode?qrcode=${encodedQrcode}`, { cache: "no-cache" });
         if (!res.ok) {
             throw new Error('Failed to fetch product');
         }
@@ -171,7 +174,7 @@ export function QrcodeReaderComponent() {
                     registration_date: new Date()
                 };
     
-                return fetch('https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/purchase', {
+                return fetch('http://127.0.0.1:8000/purchase', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -235,6 +238,7 @@ export function QrcodeReaderComponent() {
                         <div key={index} className="card bg-base-100 shadow-xl">
                             <div className="card-body">
                                 <h3 className="card-title">{purchase.product_name}</h3>
+                                <img src={purchase.image_url} alt={purchase.product_name} style={{ width: '100%', height: 'auto' }}/>
                                 <p>数量: {purchase.quantity}</p>
                                 <p>購入日: {new Date(purchase.registration_date).toLocaleDateString()}</p>
                             </div>
@@ -251,6 +255,7 @@ export function QrcodeReaderComponent() {
                         <div key={index} className="card bg-base-100 shadow-xl">
                             <div className="card-body">
                                 <h3 className="card-title">{product.product_name}</h3>
+                                <img src={product.image_url} alt={product.product_name} style={{ width: '100%', height: 'auto' }}/>
                                 <p>価格: ¥{product.including_tax_price}</p>
                             </div>
                         </div>
