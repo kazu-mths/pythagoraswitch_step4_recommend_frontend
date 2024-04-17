@@ -30,6 +30,16 @@ const [cameras, setCameras] = useState<any>([]);
 // QRコードリーダーインスタンス
 const [html5QrcodeScanner, setHtml5QrcodeScanner] = useState<any>(null);
 
+// スキャナーのセットアップとクリーンアップ
+useEffect(() => {
+    const scanner = new Html5Qrcode(qrcodeRegionId);
+    setHtml5QrcodeScanner(scanner);
+
+    return () => {
+        scanner.stop().catch(console.error);
+    };
+}, [onScanSuccess, onScanFailure]);
+
 // カメラ情報を取得するための関数
 const getCameras = async () => {
     await Html5Qrcode.getCameras()
@@ -49,20 +59,20 @@ const getCameras = async () => {
     });
 };
 
+
 // スキャン開始
-const startScan = async () => {
-    try {
-    await html5QrcodeScanner.start(
-        selectedCameraId,
-        config,
-        onScanSuccess,
-        onScanFailure,
-    );
-    setHtml5QrcodeScanner(html5QrcodeScanner);
-    } catch (error) {
-    console.error('Error starting the scanner: ', error);
+  const startScan = async () => {
+    if (!html5QrcodeScanner) {
+      console.error('Scanner not initialized');
+      return;
     }
-};
+    try {
+      await html5QrcodeScanner.start(selectedCameraId, config, onScanSuccess, onScanFailure);
+    } catch (error) {
+      console.error('Error starting the scanner:', error);
+    }
+  };
+
 
 // スキャン停止
 const stopScan = async () => {
@@ -75,25 +85,43 @@ const stopScan = async () => {
     }
 };
 
-// カメラ切り替え
-const switchCamera = (targetId: string) => {
-    console.log(targetId);
-    setSelectedCameraId(targetId);
-};
+  const switchCamera = async (cameraId) => {
+    setSelectedCameraId(cameraId);
+    if (html5QrcodeScanner) {
+      try {
+        await html5QrcodeScanner.stop();
+        await html5QrcodeScanner.start(cameraId, config, onScanSuccess, onScanFailure);
+      } catch (error) {
+        console.error('Error switching camera:', error);
+      }
+    }
+  };
 
+// カメラIDが変更されたときのスキャン再開
 useEffect(() => {
-    if (!onScanSuccess && !onScanFailure) {
-    throw 'required callback.';
+    const startScan = async () => {
+        if (!html5QrcodeScanner) {
+            console.error('Scanner not initialized');
+            return;
+        }
+        try {
+            await html5QrcodeScanner.start(selectedCameraId, config, onScanSuccess, onScanFailure);
+        } catch (error) {
+            console.error('Error starting the scanner: ', error);
+        }
+    };
+
+    if (selectedCameraId) {
+        startScan();
     }
 
-    const scanner = new Html5Qrcode(qrcodeRegionId);
-    setHtml5QrcodeScanner(scanner);
-
-    return () => {
-    scanner.clear();
-    };
-}, []);
-
+        return () => {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().catch(console.error);
+            }
+        };
+    }, [html5QrcodeScanner, selectedCameraId, onScanSuccess, onScanFailure]);
+    
 return (
     <div className='container mx-auto'>
     <div className='max-w-screen-lg' id={qrcodeRegionId} />
