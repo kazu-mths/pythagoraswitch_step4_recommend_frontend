@@ -11,7 +11,11 @@ const UserTokenComponent: React.FC<UserTokenComponentProps> = ({ setToken }) => 
   const user_token = searchParams.get("token");
 
   useEffect(() => {
-    setToken(user_token);
+    if (user_token) {
+      setToken(user_token);
+    } else {
+      alert('No token found. Please make sure you are logged in.');
+    }
   }, [user_token, setToken]);
 
   return null;  // このコンポーネントはビジュアルをレンダリングしない

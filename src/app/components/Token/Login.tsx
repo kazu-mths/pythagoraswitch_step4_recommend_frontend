@@ -2,17 +2,16 @@
 import { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-
 export default function Login() {
     const formRef = useRef<HTMLFormElement>(null);
     const [userName, setUserName] = useState('');
     const [token, setToken] = useState('');
+    const [firstLogin, setFirstLogin] = useState(false);
     const router = useRouter();
 
     const handleSend = async (event: any) => {
         event.preventDefault();
 
-        
         if (formRef.current) {
             const formData = new FormData(formRef.current);
             const body_msg = JSON.stringify({
@@ -20,35 +19,39 @@ export default function Login() {
                 password: formData.get('password'),
             });
 
-            const response = await fetch('https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/login', {
+            const response = await fetch('http://127.0.0.1:8000/login', {
                 method: 'POST',
-                body: body_msg,
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: body_msg,
             });
 
             if (response.ok) {
                 const jsonData = await response.json();
+                console.log("Login Response:", jsonData);  // レスポンスの全データを確認
                 setToken(jsonData.access_token);
                 setUserName(jsonData.user_name);
-                console.log(jsonData);
+                setFirstLogin(jsonData.first_login);
+
+                console.log("First Login:", jsonData.first_login); // first_loginの値をログ出力
             } else {
                 console.error('Login request failed:', response.statusText);
-                window.alert(`Login request failed`);
+                alert(`Login request failed: ${response.statusText}`);
             }
         }
     };
 
     useEffect(() => {
-        console.log(userName);
-
-        
         if (userName) {
-            window.alert(`ようこそ ${userName}さま！`);
-            router.push(`/shopping?token=${token}`);
+            console.log("Redirect Condition:", firstLogin);  // リダイレクト前の条件をログ出力
+            if (firstLogin) {
+                router.push(`/survey?token=${token}`); // 初回ログインの場合はSurveyFormへ
+            } else {
+                router.push(`/shopping?token=${token}`); // 初回ログインでない場合は直接Shoppingへ
+            }
         }
-    },[userName, token, router]);
+    }, [userName, token, firstLogin, router]);
 
     return (
         <>
