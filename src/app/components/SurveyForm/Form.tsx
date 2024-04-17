@@ -47,7 +47,7 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         });
 
         if (response.ok) {
-            router.push(`/shopping?token=${encodeURIComponent(token)}`);
+            router.push(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${encodeURIComponent(token)}`);
         } else {
             const error = await response.json();
             alert(`アンケートの送信に失敗しました: ${error.detail || 'サーバーエラー'}`);
