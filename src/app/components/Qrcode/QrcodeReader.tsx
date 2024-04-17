@@ -16,7 +16,7 @@ onScanFailure: any;
 // QRコードリーダーの設定
 // fpsは読み取り頻度。デフォルトは　2.１秒間に何回読み取るかの値を設定。１ならば１秒間に１回読み取る。
 // qrboxは読み取り範囲の設定。widthとheightを設定する。
-const config = { fps: 1, qrbox: { width: 250, height: 250 } };
+const [config,setConfig] = usestate({ fps: 1, qrbox: { width: 250, height: 250 } });
 
 // カメラの許可
 const [cameraPermission, setCameraPermission] = useState(false);
@@ -85,7 +85,7 @@ const stopScan = async () => {
     }
 };
 
-  const switchCamera = async (cameraId) => {
+  const switchCamera = async (cameraId: string) => {
     setSelectedCameraId(cameraId);
     if (html5QrcodeScanner) {
       try {
