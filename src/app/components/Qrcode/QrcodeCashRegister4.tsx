@@ -217,9 +217,6 @@ export function QrcodeReaderComponent() {
                                     </label>
                                 </div>
 
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <UserTokenComponent setToken={setToken} />
-                                </Suspense>
                                 <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
                             </div>
                         </div>
