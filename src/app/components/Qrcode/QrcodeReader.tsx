@@ -6,7 +6,14 @@ import Select from 'react-select';
 // QRコードリーダーの表示領域のhtmlのID
 const qrcodeRegionId = 'html5qr-code-full-region';
 
-useEffect(() => {
+export default function QrcodeReader({
+onScanSuccess,
+onScanFailure,
+}: {
+onScanSuccess: any;
+onScanFailure: any;
+}) {
+    useEffect(() => {
     if (!onScanSuccess || !onScanFailure) {
         throw new Error('onScanSuccess and onScanFailure callbacks are required.');
     }
@@ -18,14 +25,6 @@ useEffect(() => {
         scanner.clear();
     };
 }, [onScanSuccess, onScanFailure]); // 依存配列に追加
-
-export default function QrcodeReader({
-onScanSuccess,
-onScanFailure,
-}: {
-onScanSuccess: any;
-onScanFailure: any;
-}) {
 // QRコードリーダーの設定
 // fpsは読み取り頻度。デフォルトは　2.１秒間に何回読み取るかの値を設定。１ならば１秒間に１回読み取る。
 // qrboxは読み取り範囲の設定。widthとheightを設定する。
