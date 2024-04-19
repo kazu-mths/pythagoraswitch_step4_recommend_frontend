@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 interface QrcodeReaderProps {
-  onScanSuccess: (result: any) => void;
+  onScanSuccess: (result: string) => void;
   onScanFailure: (error: any) => void;
 }
 
