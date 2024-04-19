@@ -3,6 +3,11 @@ import { Html5Qrcode } from 'html5-qrcode';
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
 
+interface QrcodeReaderProps {
+  onScanSuccess: (result: any) => void;
+  onScanFailure: (error: any) => void;
+}
+
 const qrcodeRegionId = 'html5qr-code-full-region';
 
 export default function QrcodeReader({
