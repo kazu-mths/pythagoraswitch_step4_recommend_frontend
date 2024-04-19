@@ -13,18 +13,6 @@ onScanFailure,
 onScanSuccess: any;
 onScanFailure: any;
 }) {
-    useEffect(() => {
-    if (!onScanSuccess || !onScanFailure) {
-        throw new Error('onScanSuccess and onScanFailure callbacks are required.');
-    }
-
-    const scanner = new Html5Qrcode(qrcodeRegionId);
-    setHtml5QrcodeScanner(scanner);
-
-    return () => {
-        scanner.clear();
-    };
-}, [onScanSuccess, onScanFailure]); // 依存配列に追加
 // QRコードリーダーの設定
 // fpsは読み取り頻度。デフォルトは　2.１秒間に何回読み取るかの値を設定。１ならば１秒間に１回読み取る。
 // qrboxは読み取り範囲の設定。widthとheightを設定する。
