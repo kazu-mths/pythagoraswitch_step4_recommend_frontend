@@ -1,7 +1,13 @@
+"use client";
 import React from 'react';
+import counseling from './../components/Qrcode/Counseling';
 
-function Page() {
-    return <div>カウンセリングページのコンテンツ</div>;
+export default function Counseling() {
+  return (
+      <main>
+        <div>
+          <Counseling />
+        </div>
+      </main>
+  );
 }
-
-export default Page;  // コンポーネントをデフォルトエクスポート
