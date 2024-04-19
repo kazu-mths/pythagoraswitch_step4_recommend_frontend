@@ -1,9 +1,7 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import QrcodeReader from './QrcodeReader';
-// import { useSearchParams } from 'next/navigation';
 import UserTokenComponent from './UserTokenComponent';
-import Image from 'next/image';
 
 interface Product {
     product_id: number;
@@ -75,12 +73,6 @@ export function QrcodeReaderComponent() {
         };
         fetchMyPageData();
     }, [token]);
-
-    // useEffect(() => {
-    //     if (user_token) {
-    //         setToken(user_token);
-    //     }
-    // }, [user_token]);
 
     async function fetchUser(token: string): Promise<User> {
         const response = await fetch(`https://tech0-gen-5-step4-studentwebapp-1.azurewebsites.net/shopping?token=${token}`, { cache: "no-cache" });
@@ -217,6 +209,9 @@ export function QrcodeReaderComponent() {
                                     </label>
                                 </div>
 
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <UserTokenComponent setToken={setToken} />
+                                </Suspense>
                                 <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
                             </div>
                         </div>
