@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 interface QrcodeReaderProps {
-  onScanSuccess: (result: string) => void;
+  onScanSuccess: (result: any) => void;
   onScanFailure: (error: any) => void;
 }
 
@@ -13,6 +13,9 @@ const qrcodeRegionId = 'html5qr-code-full-region';
 export default function QrcodeReader({
   onScanSuccess,
   onScanFailure,
+}: {
+onScanSuccess: any;
+onScanFailure: any;
 }) {
   const config = { fps: 1, qrbox: { width: 250, height: 250 } };
   const [cameraPermission, setCameraPermission] = useState(false);
