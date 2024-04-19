@@ -6,6 +6,19 @@ import Select from 'react-select';
 // QRコードリーダーの表示領域のhtmlのID
 const qrcodeRegionId = 'html5qr-code-full-region';
 
+useEffect(() => {
+    if (!onScanSuccess || !onScanFailure) {
+        throw new Error('onScanSuccess and onScanFailure callbacks are required.');
+    }
+
+    const scanner = new Html5Qrcode(qrcodeRegionId);
+    setHtml5QrcodeScanner(scanner);
+
+    return () => {
+        scanner.clear();
+    };
+}, [onScanSuccess, onScanFailure]); // 依存配列に追加
+
 export default function QrcodeReader({
 onScanSuccess,
 onScanFailure,
