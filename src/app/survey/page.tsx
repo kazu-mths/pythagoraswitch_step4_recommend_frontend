@@ -1,13 +1,13 @@
 'use client';
-import React from 'react';
+import React, { Suspense } from 'react';
 import Form from './../components/SurveyForm/Form';
 
 export default function Survey() {
   return (
       <main>
-        <div>
+        <Suspense>
           <Form />
-        </div>
+        </Suspense>
       </main>
   );
 }
