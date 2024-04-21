@@ -9,7 +9,6 @@ interface Product {
     product_name: string;
     including_tax_price: number;
     quantity: number;
-    tax: number;
     favorite: boolean;
     image_url: string;
 }
@@ -66,6 +65,7 @@ export function QrcodeReaderComponent() {
                     const data = await response.json();
                     setRecentPurchases(data.recent_purchases);
                     setFavoriteProducts(data.favorite_products);
+                    console.log("APIから取得した購入履歴データ:", data.recent_purchases);
                 } catch (error) {
                     console.error("Failed to fetch my page data:", error);
                 }
@@ -231,7 +231,7 @@ export function QrcodeReaderComponent() {
                         <div key={index} className="card bg-base-100 shadow-xl">
                             <div className="card-body">
                                 <h3 className="card-title">{purchase.product_name}</h3>
-                                <img src={purchase.image_url} alt={purchase.product_name} style={{ width: '100%', height: 'auto' }}/>
+                                <img src={purchase.image_url} alt={purchase.product_name} style={{ width: '100%', height: '100%', objectFit: 'contain' }}/>
                                 <p>数量: {purchase.quantity}</p>
                                 <p>購入日: {new Date(purchase.registration_date).toLocaleDateString()}</p>
                             </div>
@@ -248,7 +248,7 @@ export function QrcodeReaderComponent() {
                         <div key={index} className="card bg-base-100 shadow-xl">
                             <div className="card-body">
                                 <h3 className="card-title">{product.product_name}</h3>
-                                <img src={product.image_url} alt={product.product_name} style={{ width: '100%', height: 'auto' }}/>
+                                <img src={product.image_url} alt={product.product_name} style={{ width: '100%', height: '100%', objectFit: 'contain' }}/>
                                 <p>価格: ¥{product.including_tax_price}</p>
                             </div>
                         </div>

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 import React, { Suspense } from 'react';
-import Form from './../components/SurveyForm/Form';
+import AttentionPopUp from '../components/Attention/AttentionPopUp';
 
-export default function Survey() {
+export default function Attention() {
   return (
       <main>
         <div className="mx-auto max-w-[375px]">
         <Suspense>
-          <Form />
+          <AttentionPopUp/>
         </Suspense>
         </div>
       </main>
