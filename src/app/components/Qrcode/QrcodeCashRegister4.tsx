@@ -65,6 +65,7 @@ export function QrcodeReaderComponent() {
                     const data = await response.json();
                     setRecentPurchases(data.recent_purchases);
                     setFavoriteProducts(data.favorite_products);
+                    console.log("APIから取得した購入履歴データ:", data.recent_purchases);
                 } catch (error) {
                     console.error("Failed to fetch my page data:", error);
                 }
