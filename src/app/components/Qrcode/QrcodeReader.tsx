@@ -30,8 +30,6 @@ const [cameras, setCameras] = useState<any>([]);
 // QRコードリーダーインスタンス
 const [html5QrcodeScanner, setHtml5QrcodeScanner] = useState<any>(null);
 
-const [isScanning, setIsScanning] = useState(false); // スキャン状態を追跡するための状態
-
 // カメラ情報を取得するための関数
 const getCameras = async () => {
     await Html5Qrcode.getCameras()
@@ -59,25 +57,22 @@ const startScan = async () => {
         config,
         onScanSuccess,
         onScanFailure,
-      );
-      setIsScanning(true); // スキャンが開始されたことを記録
+    );
+    setHtml5QrcodeScanner(html5QrcodeScanner);
     } catch (error) {
-      console.error('Error starting the scanner: ', error);
+    console.error('Error starting the scanner: ', error);
     }
-  };
+};
 
 // スキャン停止
 const stopScan = async () => {
-  if (!isScanning) {
-    console.warn('Scanner is not running or paused');
-    return;
-  }
-  try {
+    console.log('stop scan');
+    try {
     await html5QrcodeScanner.stop();
-    setIsScanning(false); // スキャンが停止されたことを記録
-  } catch (error) {
+    setHtml5QrcodeScanner(html5QrcodeScanner);
+    } catch (error) {
     console.error('Error stopping the scanner: ', error);
-  }
+    }
 };
 
 // カメラ切り替え
@@ -95,16 +90,9 @@ useEffect(() => {
     setHtml5QrcodeScanner(scanner);
 
     return () => {
-      // スキャンが進行中の場合は、まずスキャナーを停止してからクリアする
-      if (scanner) {
-          scanner.stop().then(() => {
-              scanner.clear();
-          }).catch(error => {
-              console.error("Failed to stop the scanner: ", error);
-          });
-      }
-  };
-}, [onScanSuccess, onScanFailure]);
+    scanner.clear();
+    };
+}, []);
 
 return (
     <div className='container mx-auto'>
