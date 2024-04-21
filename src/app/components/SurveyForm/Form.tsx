@@ -41,9 +41,9 @@ export default function SurveyForm() {
     }, [user_token]); // 依存配列にuser_tokenを追加
 
     const questions = [
-        { id: 'q1', label: 'すきなにおいは？', options: ['シトラス', 'フローラル','オレンジ'] },
-        { id: 'q2', label: '肌の特徴は？', options: ['乾燥肌', '脂性肌','日焼け'] },
-        { id: 'q3', label: 'すきなブランドは？', options: ['Mandom', 'Shiseido', 'finetoday'] },
+        { id: 'q1', label: '最近気になる肌のお悩みはありますか？', options: ['シミ', 'シワ','くすみ', 'ニキビ','毛穴づまり','該当なし'] },
+        { id: 'q2', label: '直近1カ月の肌の状態は？', options: ['肌荒れ多め', 'カミソリ負けしやすい','べたつきを感じる', '赤みが出やすい','乾燥してカサカサ','該当なし'] },
+        { id: 'q3', label: '気になるブランドは？', options: ['LUCIDO', 'ニベア', 'MENSケシミン'] },
         { id: 'q4', label: 'アンケートご協力ありがとうございます。', options: ['送信'] }
     ];
 
