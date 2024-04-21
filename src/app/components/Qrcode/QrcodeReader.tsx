@@ -30,6 +30,8 @@ const [cameras, setCameras] = useState<any>([]);
 // QRコードリーダーインスタンス
 const [html5QrcodeScanner, setHtml5QrcodeScanner] = useState<any>(null);
 
+const [isScanning, setIsScanning] = useState(false); // スキャン状態を追跡するための状態
+
 // カメラ情報を取得するための関数
 const getCameras = async () => {
     await Html5Qrcode.getCameras()
@@ -57,22 +59,25 @@ const startScan = async () => {
         config,
         onScanSuccess,
         onScanFailure,
-    );
-    setHtml5QrcodeScanner(html5QrcodeScanner);
+      );
+      setIsScanning(true); // スキャンが開始されたことを記録
     } catch (error) {
-    console.error('Error starting the scanner: ', error);
+      console.error('Error starting the scanner: ', error);
     }
-};
+  };
 
 // スキャン停止
 const stopScan = async () => {
-    console.log('stop scan');
-    try {
+  if (!isScanning) {
+    console.warn('Scanner is not running or paused');
+    return;
+  }
+  try {
     await html5QrcodeScanner.stop();
-    setHtml5QrcodeScanner(html5QrcodeScanner);
-    } catch (error) {
+    setIsScanning(false); // スキャンが停止されたことを記録
+  } catch (error) {
     console.error('Error stopping the scanner: ', error);
-    }
+  }
 };
 
 // カメラ切り替え
