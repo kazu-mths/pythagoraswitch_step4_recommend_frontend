@@ -90,8 +90,15 @@ useEffect(() => {
     setHtml5QrcodeScanner(scanner);
 
     return () => {
-    scanner.clear();
-    };
+      // スキャンが進行中の場合は、まずスキャナーを停止してからクリアする
+      if (scanner) {
+          scanner.stop().then(() => {
+              scanner.clear();
+          }).catch(error => {
+              console.error("Failed to stop the scanner: ", error);
+          });
+      }
+  };
 }, [onScanSuccess, onScanFailure]);
 
 return (
