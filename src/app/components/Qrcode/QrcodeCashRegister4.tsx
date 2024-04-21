@@ -9,7 +9,6 @@ interface Product {
     product_name: string;
     including_tax_price: number;
     quantity: number;
-    tax: number;
     favorite: boolean;
     image_url: string;
 }
