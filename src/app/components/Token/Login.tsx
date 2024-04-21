@@ -46,7 +46,7 @@ export default function Login() {
         if (userName) {
             console.log("Redirect Condition:", firstLogin);  // リダイレクト前の条件をログ出力
             if (firstLogin) {
-                router.push(`/survey?token=${token}`); // 初回ログインの場合はSurveyFormへ
+                router.push(`/attention?token=${token}`); // 初回ログインの場合はSurveyFormへ
             } else {
                 router.push(`/shopping?token=${token}`); // 初回ログインでない場合は直接Shoppingへ
             }
@@ -55,23 +55,65 @@ export default function Login() {
 
     return (
         <>
-            <div>
-                <form ref={formRef} onSubmit={handleSend} style={{ width: '100%' }}>
-                    <h1>Welcome back!</h1>
-                    <div>
-                        <label>
-                            ユーザー名:
-                            <input name="user_name" type="text" />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            パスワード：
-                            <input name="password" type="password" />
-                        </label>
-                    </div>
-                    <button type="submit">SIGN IN</button>
-                </form>
+            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h1 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
+                        Sign In
+                    </h1>
+                </div>
+
+            
+                <div  className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
+                    <form className="space-y-6" ref={formRef} onSubmit={handleSend}>
+                    {/* <form className="space-y-6" ref={formRef} onSubmit={handleSend} style={{ width: '100%' }}> */}
+
+                        <div>
+                            <label htmlFor="user_name" className="block text-sm font-bold leading-6 text-black">
+                            ID
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    name="user_name"
+                                    type="text"
+                                    className="block w-full rounded-full border-2  px-5 py-1.5 text-black shadow-sm ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm sm:leading-8"
+                                />
+                            </div>
+                            {/* <label>
+                                ユーザー名:
+                                <input name="user_name" type="text" />
+                            </label> */}
+                        </div>
+
+                        <div>
+                            <div className="flex items-center justify-between">
+                                <label htmlFor="password" className="block text-sm font-bold leading-6 text-black">
+                                PASS
+                                </label>
+                            </div>
+
+                            <div className="mt-2">
+                                <input
+                                name="password"
+                                type="password"
+                                className="block w-full rounded-full border-2 px-5 py-1.5 text-black shadow-sm ring-0 ring-inset ring-black placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm sm:leading-8"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="relative flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+                            <button
+                                type="submit"
+                                className="absolute top-[300px] left-1/2 transform -translate-x-1/2 flex w-full justify-center rounded-full border-2 border-black bg-white px-3 py-1.5 text-sm font-semibold leading-8 text-black shadow-sm hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                            >
+                            Sign In
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
         </>
     );

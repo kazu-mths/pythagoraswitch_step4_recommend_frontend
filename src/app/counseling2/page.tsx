@@ -1,13 +1,13 @@
-'use client';
+"use client";
 import React, { Suspense } from 'react';
-import Form from './../components/SurveyForm/Form';
+import CounselingFinish from '../components/CounselingFinish/CounselingFinish';
 
-export default function Survey() {
+export default function Counseling2() {
   return (
       <main>
         <div className="mx-auto max-w-[375px]">
         <Suspense>
-          <Form />
+          <CounselingFinish/>
         </Suspense>
         </div>
       </main>

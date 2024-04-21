@@ -41,10 +41,10 @@ export default function SurveyForm() {
     }, [user_token]); // 依存配列にuser_tokenを追加
 
     const questions = [
-        { id: 'q1', label: '最近気になる肌のお悩みはありますか？', options: ['シミ', 'シワ','くすみ','ニキビ','毛穴づまり','該当なし'] },
-        { id: 'q2', label: '最近1カ月の肌の状態は？', options: ['肌荒れ多め', 'カミソリ負けしやすい','べたつきを感じる','赤みが出やすい','乾燥してカサカサ','該当なし'] },
-        { id: 'q3', label: '気になるブランドはありますか？', options: ['LUCIDO｜mandom', 'SHISEIDO MEN｜資生堂','NIVEA MEN｜花王','ORBIS Mr.｜ORBIS','MENSケシミン｜小林製薬','該当なし'] },
-        { id: 'q4', label: '直近1カ月の生活習慣は？', options: ['水分をあまり取れていない','生活リズムが崩れている','寝不足が続いている','油っぽいものを食べがち','偏った食事をしている','該当なし'] }
+        { id: 'q1', label: '最近気になる肌のお悩みはありますか？', options: ['シミ', 'シワ','くすみ', 'ニキビ','毛穴づまり','該当なし'] },
+        { id: 'q2', label: '直近1カ月の肌の状態は？', options: ['肌荒れ多め', 'カミソリ負けしやすい','べたつきを感じる', '赤みが出やすい','乾燥してカサカサ','該当なし'] },
+        { id: 'q3', label: '気になるブランドは？', options: ['LUCIDO', 'ニベア', 'MENSケシミン'] },
+        { id: 'q4', label: 'アンケートご協力ありがとうございます。', options: ['送信'] }
     ];
 
     const surveyResponses = {
@@ -77,7 +77,7 @@ export default function SurveyForm() {
             });
 
             if (response.ok) {
-                router.push(`/counseling2?token=${token}`);
+                router.push(`/mypage?token=${token}`);
             } else {
                 const error = await response.json();
                 alert(`アンケートの送信に失敗しました: ${error.detail || 'サーバーエラー'}`);
@@ -99,37 +99,18 @@ export default function SurveyForm() {
     };
 
     return (
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h1 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
-                        Counseling
-                    </h1>
-                </div>
-
-                {/* <div>はじめまして、{userName}さん</div> */}
-
-                <div  className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                        <h2 className="mt-5 text-xl font-bold leading-9 tracking-tight text-black">
-                            Question
-                        </h2>
-                        <p>
-                            {questions[currentQuestionIndex].label}
-                        </p>
-                    </div>
-
-                    <div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            {questions[currentQuestionIndex].options.map(option => (
-                                <button key={option} onClick={() => handleAnswer(option)} style={{ margin: '10px 0' }} className="flex w-full justify-center rounded-full border-2 border-black bg-white px-3 py-1.5 text-sm font-semibold leading-8 text-black shadow-sm hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
-                                    {option}
-                                </button>
-                            ))}
-                        </div>
+            <div>
+                <div>はじめまして、{userName}さん</div>
+                <div>
+                    <h1>{questions[currentQuestionIndex].label}</h1>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        {questions[currentQuestionIndex].options.map(option => (
+                            <button key={option} onClick={() => handleAnswer(option)} style={{ margin: '10px 0' }}>
+                                {option}
+                            </button>
+                        ))}
                     </div>
                 </div>
-
             </div>
         );
 }
