@@ -70,15 +70,15 @@ onScanFailure: any;
           <p>カメラがありません</p>
         )}
       </div>
-      <div>
-        <button className='bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 rounded mr-2' onClick={fetchCameras}>
-          カメラ取得
+      <div className='mt-2'>
+        <button className='border-2 border-black bg-white hover:bg-black text-black hover:text-white text-sm font-bold py-1 px-2 rounded-full mr-2' onClick={fetchCameras}>
+          setting
         </button>
-        <button className='bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 rounded mr-2' onClick={async () => await html5QrcodeScanner.start(selectedCameraId, config, onScanSuccess, onScanFailure)} disabled={!cameraPermission && !selectedCameraId}>
-          スキャン開始
+        <button className='border-2 border-black bg-white hover:bg-black text-black hover:text-white text-sm font-bold py-1 px-2 rounded-full mr-2' onClick={async () => await html5QrcodeScanner.start(selectedCameraId, config, onScanSuccess, onScanFailure)} disabled={!cameraPermission && !selectedCameraId}>
+          scan
         </button>
-        <button className='bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-1 px-2 rounded' onClick={async () => await html5QrcodeScanner.stop()}>
-          スキャン停止
+        <button className='border-2 border-black bg-white hover:bg-black text-black hover:text-white text-sm font-bold py-1 px-2 rounded-full mr-2' onClick={async () => await html5QrcodeScanner.stop()}>
+          stop
         </button>
       </div>
     </div>
