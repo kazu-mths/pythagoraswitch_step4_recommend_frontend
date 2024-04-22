@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Homepage() {
+export default function Homepage2() {
     const formRef = useRef<HTMLFormElement>(null);
     const user_token: string | null = useSearchParams().get("token");
     const router = useRouter();
@@ -10,7 +10,7 @@ export default function Homepage() {
     const handleSend = async (event: any) => {
         event.preventDefault();
 
-        router.push(`/loginbonus?token=${user_token}`);
+        router.push(`/recommend?token=${user_token}`);
     };
 
 
