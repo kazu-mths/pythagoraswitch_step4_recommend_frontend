@@ -9,7 +9,6 @@ interface Product {
     product_name: string;
     including_tax_price: number;
     quantity: number;
-    tax: number;
     favorite: boolean;
     image_url: string;
 }
@@ -66,6 +65,7 @@ export function QrcodeReaderComponent() {
                     const data = await response.json();
                     setRecentPurchases(data.recent_purchases);
                     setFavoriteProducts(data.favorite_products);
+                    console.log("APIから取得した購入履歴データ:", data.recent_purchases);
                 } catch (error) {
                     console.error("Failed to fetch my page data:", error);
                 }
@@ -81,7 +81,6 @@ export function QrcodeReaderComponent() {
         }
         return response.json();
     }
-
     useEffect(() => {
         const fetchAndSetUser = async () => {
             if (token) {
@@ -108,7 +107,6 @@ export function QrcodeReaderComponent() {
             console.log(`userIdが更新されました: ${userId}`);
         }
     }, [userId]);
-
     const onNewScanResult = (result: any) => {
         console.log('QRコードスキャン結果', result);
         setScannedTime(new Date());
@@ -150,7 +148,7 @@ export function QrcodeReaderComponent() {
         };
         fetchAndSetProduct();
     }, [scannedTime, scannedResult]);
-
+    
     const registerProducts = async () => {
         if (!userId || !token) {
             alert('ユーザー情報または認証トークンを取得できませんでした。');
@@ -186,7 +184,6 @@ export function QrcodeReaderComponent() {
         }
     };
 
-
     return (
         <>
         <div  className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 relative">
@@ -207,7 +204,11 @@ export function QrcodeReaderComponent() {
                         </h2>
                         <p>
                             商品のバーコードをカメラで読み取ってください
-                        </p>
+                        </p>                        
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <UserTokenComponent setToken={setToken} />
+                        </Suspense>
+                        <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {products.map((product, index) => (
                                 <div key={index} className="card bg-base-100 shadow-xl">
@@ -221,11 +222,10 @@ export function QrcodeReaderComponent() {
                                                 <input type="checkbox" className="toggle toggle-accent" checked={product.favorite} onChange={e => handleFavoriteChange(product.product_id, e.target.checked)} />
                                             </label>
                                         </div>
-
-                                        <Suspense fallback={<div>Loading...</div>}>
+                                        {/* <Suspense fallback={<div>Loading...</div>}>
                                             <UserTokenComponent setToken={setToken} />
-                                        </Suspense>
-                                        <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
+                                            </Suspense> */}
+                                        {/* <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} /> */}
                                     </div>
                                 </div>
                             ))}
@@ -235,18 +235,17 @@ export function QrcodeReaderComponent() {
                             <button className="btn btn-primary" onClick={registerProducts}>登録</button>
                         </div>
                     </div>
-                    <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
                 
                     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                         <h2 className="mt-5 text-xl font-bold leading-9 tracking-tight text-black">
                             購入履歴
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             {recentPurchases.map((purchase, index) => (
                                 <div key={index} className="card bg-base-100 shadow-xl">
                                     <div className="card-body">
-                                        <h3 className="card-title">{purchase.product_name}</h3>
-                                        <img src={purchase.image_url} alt={purchase.product_name} style={{ width: '100%', height: 'auto' }}/>
+                                        <h3 className="card-title font-bold">{purchase.product_name}</h3>
+                                        <img src={purchase.image_url} alt={purchase.product_name} style={{ display: 'block', width: 'auto', height: '200px', objectFit: 'contain', marginLeft: 'auto', marginRight: 'auto' }}/>
                                         <p>数量: {purchase.quantity}</p>
                                         <p>購入日: {new Date(purchase.registration_date).toLocaleDateString()}</p>
                                     </div>
@@ -260,12 +259,12 @@ export function QrcodeReaderComponent() {
                         <h2 className="mt-5 text-xl font-bold leading-9 tracking-tight text-black">
                             お気に入り
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             {favoriteProducts.map((product, index) => (
                                 <div key={index} className="card bg-base-100 shadow-xl">
                                     <div className="card-body">
-                                        <h3 className="card-title">{product.product_name}</h3>
-                                        <img src={product.image_url} alt={product.product_name} style={{ width: '100%', height: 'auto' }}/>
+                                        <h3 className="card-titl font-bold">{product.product_name}</h3>
+                                        <img src={product.image_url} alt={product.product_name} style={{ display: 'block', width: 'auto', height: '200px', objectFit: 'contain', marginLeft: 'auto', marginRight: 'auto' }}/>
                                         <p>価格: ¥{product.including_tax_price}</p>
                                     </div>
                                 </div>
@@ -274,39 +273,6 @@ export function QrcodeReaderComponent() {
                     </div>
                 
                 </div>
-
-            {/* <div className="p-4">
-            <Suspense fallback={<div>Loading token...</div>}>
-                <UserTokenComponent setToken={setToken} />
-            </Suspense>
-                <h2 className="text-2xl font-bold mb-4">商品登録</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {products.map((product, index) => (
-                        <div key={index} className="card bg-base-100 shadow-xl">
-                            <div className="card-body">
-                                <h3 className="card-title">{product.product_name}</h3>
-                                <p>価格: ¥{product.including_tax_price}</p>
-                                <p>数量: {product.quantity}</p>
-                                <div className="card-actions justify-end">
-                                    <label className="label cursor-pointer">
-                                        <span className="label-text">お気に入り</span>
-                                        <input type="checkbox" className="toggle toggle-accent" checked={product.favorite} onChange={e => handleFavoriteChange(product.product_id, e.target.checked)} />
-                                    </label>
-                                </div>
-
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <UserTokenComponent setToken={setToken} />
-                                </Suspense>
-                                <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div className="py-4">
-                    <button className="btn btn-primary" onClick={registerProducts}>登録</button>
-                </div>
-            </div>
-            <QrcodeReader onScanSuccess={onNewScanResult} onScanFailure={(error: any) => console.error('QR scan error', error)} /> */}
         </div>
         </>
     );

@@ -43,7 +43,7 @@ export default function SurveyForm() {
     const questions = [
         { id: 'q1', label: '最近気になる肌のお悩みはありますか？', options: ['シミ', 'シワ','くすみ','ニキビ','毛穴づまり','該当なし'] },
         { id: 'q2', label: '最近1カ月の肌の状態は？', options: ['肌荒れ多め', 'カミソリ負けしやすい','べたつきを感じる','赤みが出やすい','乾燥してカサカサ','該当なし'] },
-        { id: 'q3', label: '気になるブランドはありますか？', options: ['LUCIDO｜mandom', 'SHISEIDO MEN｜資生堂','NIVEA MEN｜花王','ORBIS Mr.｜ORBIS','MENSケシミン｜小林製薬','該当なし'] },
+        { id: 'q3', label: '気になるブランドはありますか？', options: ['ルシード｜mandom', 'SHISEIDO MEN｜資生堂','NIVEA MEN｜花王','ORBIS Mr.｜ORBIS','MENSケシミン｜小林製薬','該当なし'] },
         { id: 'q4', label: '直近1カ月の生活習慣は？', options: ['水分をあまり取れていない','生活リズムが崩れている','寝不足が続いている','油っぽいものを食べがち','偏った食事をしている','該当なし'] }
     ];
 
