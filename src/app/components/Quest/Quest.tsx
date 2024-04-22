@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Homepage() {
+export default function QuestTop() {
     const formRef = useRef<HTMLFormElement>(null);
     const user_token: string | null = useSearchParams().get("token");
     const router = useRouter();
@@ -10,7 +10,7 @@ export default function Homepage() {
     const handleSend = async (event: any) => {
         event.preventDefault();
 
-        router.push(`/loginbonus?token=${user_token}`);
+        router.push(`/quest2?token=${user_token}`);
     };
 
 
@@ -18,7 +18,7 @@ export default function Homepage() {
         <>
 
             <div className="relative flex justify-center items-center mt-0 mb-0 sm:mx-auto sm:w-full sm:max-w-sm">
-            <img src="/home.png" alt="Home Screen" className="max-w-full h-auto"/>
+            <img src="/quest_top.png" alt="Home Screen" className="max-w-full h-auto"/>
             <form ref={formRef} onSubmit={handleSend} className="absolute inset-0 flex justify-center items-center">
                 <button type="submit" style={{background: 'transparent', border: 'none', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
                 　

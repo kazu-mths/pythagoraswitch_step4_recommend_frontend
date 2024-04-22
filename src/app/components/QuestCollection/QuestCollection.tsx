@@ -9,15 +9,15 @@ export default function LoginBonus() {
 
     const handleSend = async (event: any) => {
         event.preventDefault();
-        router.push(`/quest1?token=${user_token}`);
+        router.push(`/mypage2?token=${user_token}`);
     };
 
-    const [imageSrc, setImageSrc] = useState('/bonus.gif'); // 初期状態はアニメーションGIF
+    const [imageSrc, setImageSrc] = useState('/collection.gif'); // 初期状態はアニメーションGIF
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setImageSrc('/walking_bonus.png'); // 1ループ後に静止画に切り替える
-        }, 5000);  // GIFの再生時間に応じて調整
+            setImageSrc('/quest_collection2.png'); // 1ループ後に静止画に切り替える
+        }, 14000);  // GIFの再生時間に応じて調整
 
         return () => clearTimeout(timer);
     }, []);
@@ -29,7 +29,7 @@ export default function LoginBonus() {
             <img src={imageSrc}  alt="Home Screen" className="max-w-full h-auto"/>
             <form ref={formRef} onSubmit={handleSend} className="absolute inset-0 flex justify-center items-center">
                 <button type="submit" style={{background: 'transparent', border: 'none', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-                　
+                　　　
                 </button>
                 {/* <button
                     type="submit"

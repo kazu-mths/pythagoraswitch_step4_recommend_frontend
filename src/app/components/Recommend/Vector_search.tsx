@@ -67,24 +67,70 @@ export default function Vector_search() {
 
     return (
         <>
-            <div>
-                <div>ようこそ {userName}さん</div>
-                <form ref={formRef} onSubmit={handleSend} style={{ width: '100%' }}>
+            <div  className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 relative">
+                
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h1 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
+                        Talk with P-san
+                    </h1>
+                </div>
+
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h2 className="mt-5 text-sm  leading-4 tracking-tight text-black">
+                        AI搭載！ピタゴラ社の研究データや最新の商品情報をもとに、P-sanがあなたのスキンケアのお悩みに回答します！
+                    </h2>
+                </div>
+
+                <div  className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+                    <form className="space-y-6" ref={formRef} onSubmit={handleSend}>
+                    {/* <form ref={formRef} onSubmit={handleSend} style={{ width: '100%' }}> */}
+                        <div>
+                            <label htmlFor="user_name" className="block text-sm font-bold leading-6 text-black">
+                                相談内容を入力してください
+                            </label>
+                            <div className="mt-2">
+                                <textarea
+                                    name="input_prompt"
+                                    // type="text"
+                                    className="block w-full rounded-md border-2 px-5 py-1.5 text-black shadow-sm ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm sm:leading-8"
+                                    rows={4}
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className='mt-6 mb-6'>
+                            <button
+                                type="submit"
+                                className="flex w-full justify-center rounded-full border-2 border-black bg-white px-3 py-1.5 text-sm font-semibold leading-8 text-black shadow-sm hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                            >
+                            相談する
+                            </button>
+                        </div>
+                    </form>
+
+                    {recommendMessage ? (
+                        <>
+                            <div className='mt-6 mb-6'>
+                            <img src="/talk.png" alt="Description Image" className="w-1/4" />
+                            <div className="mt-0 border-2 rounded-md p-2 shadow-sm ring-0 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-black">
+                                {recommendMessage}
+                            </div>
+                            </div>
+                        </>
+                    ) : null}
+
+                </div>
+
+                <div  className="mt-1 sm:mx-auto sm:w-full sm:max-w-sm">
                     <div>
-                        <label>
-                            何か気になることある？
-                            <input name="input_prompt" type="text" />
-                        </label>
+                        {/* <img src="/menu.png" alt="Menu Image" className="absolute top-[700px] w-full" /> */}
+                        <button onClick={navigateToShopping}>Scan</button>
                     </div>
-                    <button type="submit">相談</button>
-                </form>
+                </div>
             </div>
-            <div>
-                <div> {recommendMessage}</div>
-            </div>
-            <div>
-                <button onClick={navigateToShopping}>クエスト</button>
-            </div>
+            
+
+
         </>
     );
 }

@@ -1,12 +1,12 @@
 "use client";
 import React, { Suspense } from 'react';
-import Homepage from './../components/Home/Homepage';
+import QuestTop from '../components/Quest/Quest';
 
-export default function Load_Homepage() {
+export default function Quest1() {
   return (
       <main>
         <Suspense>
-          <Homepage/>
+          <QuestTop/>
         </Suspense>
       </main>
   );
