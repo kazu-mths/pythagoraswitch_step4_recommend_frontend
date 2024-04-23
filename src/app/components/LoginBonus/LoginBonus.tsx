@@ -31,13 +31,6 @@ export default function LoginBonus() {
                 <button type="submit" style={{background: 'transparent', border: 'none', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
                 　
                 </button>
-                {/* <button
-                    type="submit"
-                    // className="absolute top-[200px] left-1/2 transform -translate-x-1/2 flex w-full justify-center rounded-full border-2 border-black bg-white px-3 py-1.5 text-sm font-semibold leading-8 text-black shadow-sm hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                    className="absolute top-[493px] left-1/2 transform -translate-x-1/2 w-[180px] bg-transparent  text-center rounded-full border-2 bg-black border-black px-3 py-1.5 text-sm font-semibold leading-8 text-white shadow-sm hover:bg-white hover:text-black focus:outline-black focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                >
-                    Questで確認
-                </button> */}
             </form>
             </div>
 

@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useRouter, useSearchParams} from 'next/navigation';
 
-export default function Vector_search() {
+export default function Vector_search3() {
     const formRef = useRef<HTMLFormElement>(null);
     const [token, setToken] = useState<string | null>(null);
     const user_token: string | null = useSearchParams().get("token");
@@ -62,7 +62,7 @@ export default function Vector_search() {
     };
 
     const navigateToShopping = () => {
-        router.push(`/recommend2?token=${user_token}`);
+        router.push(`/shopping?token=${user_token}`);
     };
 
     return (
@@ -71,54 +71,59 @@ export default function Vector_search() {
                 
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h1 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
-                        Talk with P-san
+                        Scan
                     </h1>
                 </div>
 
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 className="mt-5 text-sm  leading-4 tracking-tight text-black">
-                        AI搭載！ピタゴラ社の研究データや最新の商品情報をもとに、P-sanがあなたのスキンケアのお悩みに回答します！
+                    <h2 className="mt-5 text-md  text-bold leading-4 tracking-tight text-black">
+                        HOW TO USE
                     </h2>
                 </div>
 
-                <div  className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" ref={formRef} onSubmit={handleSend}>
-                    {/* <form ref={formRef} onSubmit={handleSend} style={{ width: '100%' }}> */}
-                        <div>
-                            <label htmlFor="user_name" className="block text-sm font-bold leading-6 text-black">
-                                相談内容を入力してください
-                            </label>
-                            <div className="mt-2">
-                                <textarea
-                                    name="input_prompt"
-                                    // type="text"
-                                    className="block w-full rounded-md border-2 px-5 py-1.5 text-black shadow-sm ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm sm:leading-8"
-                                    rows={4}
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className='mt-6 mb-6'>
-                            <button
-                                type="submit"
-                                className="flex w-full justify-center rounded-full border-2 border-black bg-white px-3 py-1.5 text-sm font-semibold leading-8 text-black shadow-sm hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                            >
-                            相談する
-                            </button>
-                        </div>
-                    </form>
+                <div className="relative flex justify-center items-center mt-0 mb-0 sm:mx-auto sm:w-full sm:max-w-sm">
+                <img src="/howto_step1.png" alt="Home Screen" className="max-w-full h-auto"/>
+                <form ref={formRef} onSubmit={handleSend} className="absolute inset-0 flex justify-center items-center">
+                <button type="submit" style={{background: 'transparent', border: 'none', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                　
+                </button>
+                </form>
+                </div>
 
-                    {recommendMessage ? (
-                        <>
-                            <div className='mt-6 mb-6'>
-                            <img src="/talk.png" alt="Description Image" className="w-1/4" />
-                            <div className="mt-0 border-2 rounded-md p-2 shadow-sm ring-0 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-black">
-                                {recommendMessage}
-                            </div>
-                            </div>
-                        </>
-                    ) : null}
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h2 className="mt-5 text-md  text-bold leading-4 tracking-tight text-black">
+                    洗顔・ヒゲそり・入浴後などに、適量(顔全体であずき2粒程度)を手のひらに取ります。
+                    </h2>
+                </div>
 
+                <div className="relative flex justify-center items-center mt-0 mb-0 sm:mx-auto sm:w-full sm:max-w-sm">
+                <img src="/howto_step2.png" alt="Home Screen" className="max-w-full h-auto"/>
+                <form ref={formRef} onSubmit={handleSend} className="absolute inset-0 flex justify-center items-center">
+                <button type="submit" style={{background: 'transparent', border: 'none', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                　
+                </button>
+                </form>
+                </div>
+
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h2 className="mt-5 text-md  text-bold leading-4 tracking-tight text-black">
+                    手になじませます。
+                    </h2>
+                </div>
+
+                <div className="relative flex justify-center items-center mt-0 mb-0 sm:mx-auto sm:w-full sm:max-w-sm">
+                <img src="/howto_step3.png" alt="Home Screen" className="max-w-full h-auto"/>
+                <form ref={formRef} onSubmit={handleSend} className="absolute inset-0 flex justify-center items-center">
+                <button type="submit" style={{background: 'transparent', border: 'none', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                　
+                </button>
+                </form>
+                </div>
+
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h2 className="mt-5 text-md  text-bold leading-4 tracking-tight text-black">
+                    ほほ、おでこ、あごなど顔全体に、やさしく肌になじませていきます。特に乾燥やテカリ、シミやシワ等、気になる部分は指の腹でなじませてください。
+                    </h2>
                 </div>
 
                 <div  className="mt-10 mb-16 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -127,8 +132,9 @@ export default function Vector_search() {
                         <button onClick={navigateToShopping}>　　　</button>
                     </div>
                 </div>
-            </div>
-            
+
+
+            </div>    
 
 
         </>
